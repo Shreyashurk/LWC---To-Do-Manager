@@ -1,0 +1,153 @@
+<template>
+    <div class="slds-grid slds-wrap">
+        <div class="slds-col slds-size_3-of-12">        
+            <lightning-card title="To Do Manager" icon-name="standard:contact_list">
+                <div class="slds-p-right_small">
+                    <div class="slds-p-left_medium">                    
+                        <lightning-input label="Task Name" value={taskName} onchange={handleTaskNameChange}></lightning-input>
+                        <lightning-input type="date" label="Due Date" value={dueDate} onchange={handleDueDateChange}></lightning-input>
+                        <div class="slds-p-top_x-small">
+                            <div class="slds-grid slds-wrap">                                                   
+                                    <div class="slds-col slds-size_2-of-12">
+                                        <span>
+                                            <lightning-button class="custom-brand-button" label="Add" variant="brand" onclick={handleCreateTask} disabled={isAddDisabled} >
+                                            </lightning-button> 
+                                        </span>
+                                    </div>
+                                    <div class="slds-col slds-size_7-of-12">
+                                        <div class="slds-p-left_medium">
+                                            <lightning-button label="Update" variant="Neutral" disabled={isUpdateDisabled} 
+                                            onclick={handleUpdateCreatedTask}></lightning-button> 
+                                        </div>
+                                    </div>  
+
+                                    <div class="slds-col slds-size_2-of-12">
+                                        <div class="slds-p-left_xx-small">
+                                            <lightning-button label="Cancel" variant="Destructive"  
+                                            onclick={handleCancel}></lightning-button> 
+                                        </div>
+                                    </div>                            
+                            </div>
+                        </div>             
+                    </div>
+                </div>
+            </lightning-card>
+        </div>
+
+   
+        <div class="slds-col slds-size_4-of-12">
+            <div class="slds-p-left_x-small">
+                <lightning-card title="Tasks To Do" icon-name="standard:picklist_choice">
+                    <div class="slds-p-left_small">
+                        <div class="slds-p-right_small">
+                            <template if:true={wiredfetchedtask.data}>
+                                <template for:each={fetchedtask} for:item="task">
+                                    <div class="slds-p-bottom_x-small"  key={task.id}>
+                                        <div class="slds-box slds-box_x-small box" data-id="box">                                       
+                                                <div class="slds-grid slds-wrap">
+                                                    <div class="slds-col slds-size_9-of-12">
+                                                        <h3 slot="title" style="font-weight:bold">
+                                                            <lightning-icon icon-name='utility:archive' alternative-text='gform' variant='warning' size='x-small' title='gform'></lightning-icon>
+                                                            <span class="slds-p-left_x-small slds-text-heading_small" >{task.Name}</span>
+                                                        </h3>
+                                                    </div>
+                                                    <div class="slds-col slds-size_1-of-12">                                                      
+                                                            <lightning-icon icon-name='utility:brush' alternative-text='Edit' 
+                                                             size='x-small' data-name={task.Name} data-id={task.Id} 
+                                                             data-date={task.Task_Date__c} title='Edit' class="icon_container"
+                                                             onclick={handleEditTask}></lightning-icon>
+                                                    </div> 
+                                                     <div class="slds-col slds-size_1-of-12">                                                      
+                                                        <lightning-icon icon-name='utility:delete' alternative-text='Delete' size='x-small' variant='error'
+                                                        data-id={task.Id} data-name={task.Name} onclick={handleDeleteClick} class="icon_container" title='Delete'></lightning-icon>
+                                                    </div>    
+                                                     <div class="slds-col slds-size_1-of-12">                                                      
+                                                       <lightning-icon icon-name='utility:check' alternative-text='Completed' variant='success' size='x-small' 
+                                                       title='Completed' data-id={task.Id} onclick={handleCompleteTask} class="icon_container">
+                                                       </lightning-icon>
+                                                    </div>                                
+                                                </div>
+
+                                                <div class="slds-p-top_x-small">
+                                                    <div class="slds-grid slds-wrap">
+                                                        <div class="slds-col slds-size_10-of-12">
+                                                            <div class="slds-p-left_large">
+                                                                <p>Due Date :- <b>{task.Task_Date__c}</b></p>
+                                                            </div>
+                                                        </div>                                                        
+                                                        
+                                                        <div class="slds-col slds-size_10-of-12">
+                                                            <div class="slds-p-left_large">
+                                                                <p>Status :- <b>{task.Status__c}</b></p>
+                                                            </div>                                                        
+                                                        </div>                                                        
+                                                    </div>    
+                                                </div>                                   
+                                        </div>
+                                    </div>
+                                </template>
+                            </template>
+
+                            <template if:false={wiredfetchedtask.data}>     
+                                <div class="slds-m-around_medium slds-text-align_center">                                            
+                                   <img class="posterImg"  src="https://img.freepik.com/premium-vector/palm-tree-black-outline-silhouette-isolated-white-background_110233-2436.jpg"/>                                
+                                   <div class="slds-p-top_xxx-small">
+                                        <p class="customfont"><b>Nothing To Do</b></p> 
+                                   </div>                                   
+                                </div>
+                                
+                            </template>
+                        </div>
+                    </div>
+                </lightning-card>
+            </div>
+        </div>
+
+        <div class="slds-col slds-size_4-of-12">   
+            <div class="slds-p-left_x-small">  
+                <lightning-card title="Completed Tasks History" icon-name="standard:call_history">
+                    <div class="slds-p-left_small">
+                        <div class="slds-p-right_small">
+                            <template lwc:if={fetchedCompletedtask}>
+                                <template for:each={fetchedCompletedtask} for:item="comp">
+                                    <div class="slds-p-bottom_x-small"  key={comp.id}>
+                                        <div class="slds-box slds-box_x-small box2"> 
+                                                <div class="slds-grid slds-wrap">
+                                                    <div class="slds-col slds-size_8-of-12">
+                                                        <h3 slot="title" style="font-weight:bold">
+                                                            <lightning-icon icon-name='standard:entitlement' alternative-text='case_change_status' size='small' 
+                                                            title='case_change_status'></lightning-icon>
+                                                            <span class="slds-p-left_x-small slds-text-heading_small"  draggable="true">{comp.Name}</span>
+                                                        </h3>
+                                                    </div>
+
+                                                    <div class="slds-col slds-size_4-of-12">
+                                                        <div class="slds-p-left_large">
+                                                        <p>On :- <b>{comp.Completed_Date__c}</b></p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                        </div>
+                                    </div>
+                                </template>
+                            </template>
+                        </div>
+                    </div>
+                    <template lwc:if={showDelete}>                        
+                        <div class="slds-grid slds-wrap">                                
+                            <div class="slds-col slds-size_8-of-12">
+                                    <span></span>
+                            </div>
+                            <div class="slds-col slds-size_4-of-12">                               
+                                <div class="slds-p-left_small">                         
+                                    <lightning-button label="Delete All Tasks" variant="destructive" onclick={handleDeleteAll}></lightning-button>                                  
+                                </div>  
+                            </div>
+                        </div>                        
+                    </template>
+                </lightning-card>
+            </div>   
+        </div>
+
+    </div>
+</template>

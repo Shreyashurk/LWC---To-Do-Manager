@@ -5,7 +5,7 @@ The To-Do Manager is a robust and user-friendly application designed to help ind
 Key Features:
 1.Intuitive Task Creation
 2.User-Friendly Interface
-3.Mass Deletion option.
+3.Mass Deletion option
 
 #To-Do-Manager Demo
 [](url)

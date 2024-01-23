@@ -1,0 +1,28 @@
+.dummy{
+	color : black;
+}
+
+.ColorChange{
+	color : rebeccapurple;
+}
+
+.icon_container:hover{
+    transform: scale(1.4); 
+    cursor: pointer;     
+}
+
+.box2 {    
+    background-color: MistyRose; /* Initial color */
+}
+
+.posterImg{
+    width: 200px;
+    height: 140px;
+    opacity: 0.5;
+    margin: auto;
+    object-fit: cover;
+}
+
+.customfont{
+    font-size: 20px; 
+}
